@@ -1,4 +1,4 @@
-package com.hack_SOAT_9.orchestrator;
+package com.hack_SOAT_9.orchestrator.bootstrap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
