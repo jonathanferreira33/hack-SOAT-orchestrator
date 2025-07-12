@@ -1,7 +1,7 @@
 package com.hack_SOAT_9.orchestrator.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hack_SOAT_9.orchestrator.bootstrap.OrchestratorApplication;
+import com.hack_SOAT_9.orchestrator.OrchestratorApplication;
 import com.hack_SOAT_9.orchestrator.enums.VideoProcessingStatus;
 import com.hack_SOAT_9.orchestrator.integration.frameExtractor.domain.VideoProcessorEvent;
 import com.hack_SOAT_9.orchestrator.integration.frameExtractor.service.ProcessVideoService;

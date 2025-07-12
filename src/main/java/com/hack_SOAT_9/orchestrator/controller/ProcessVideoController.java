@@ -5,10 +5,7 @@ import com.hack_SOAT_9.orchestrator.integration.frameExtractor.service.ProcessVi
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +24,7 @@ public class ProcessVideoController {
 
     @PostMapping("/process")
     public ResponseEntity<String> processVideo(@RequestBody VideoProcessorEvent payload) {
-
+        System.out.println("ProcessVideo chamado");
         publisherService.sendVideoToQueue(payload);
         return ResponseEntity.ok("Evento enviado para processamento");
     }
@@ -40,5 +37,10 @@ public class ProcessVideoController {
         }
 
         return ResponseEntity.ok(requests.size() + " eventos enviados para processamento!");
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("OK");
     }
 }
