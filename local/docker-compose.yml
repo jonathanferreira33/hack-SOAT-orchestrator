@@ -129,6 +129,26 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+      
+  notification:
+    build:
+      context: ../../Hackaton-notification-service
+      dockerfile: Dockerfile
+    container_name: notification
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      NOTIFICATION_EMAIL_FROM: larissa.yamaguchi1@gmail.com
+      NOTIFICATION_EMAIL_SUBJECT: Erro no processamento de vídeo
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    restart: unless-stopped
 
 volumes:
   mysql-data:
