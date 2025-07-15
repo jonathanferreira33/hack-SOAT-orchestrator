@@ -7,7 +7,7 @@ import java.io.Serializable;
 public record VideoProcessorEvent(
         String videoPath,
         String outputDir,
-        String user,
+        String userID,
         String queuedAt,
         VideoProcessingStatus status
 ) implements Serializable {
