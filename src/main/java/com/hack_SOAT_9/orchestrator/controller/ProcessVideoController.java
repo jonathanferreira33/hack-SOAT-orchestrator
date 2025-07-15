@@ -31,6 +31,7 @@ public class ProcessVideoController {
 
         for (VideoProcessorEvent request : requests) {
             publisherService.sendVideoToQueue(request);
+            System.out.println(requests.toString());
         }
 
         return ResponseEntity.ok(requests.size() + " eventos enviados para processamento!");

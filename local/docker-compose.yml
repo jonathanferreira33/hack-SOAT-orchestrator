@@ -1,37 +1,37 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: fiapdb
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: 123
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./local/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysql-data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - app-network
-    restart: unless-stopped
+#  mysql:
+#    image: mysql:8.0
+#    container_name: mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD: 123
+#      MYSQL_DATABASE: fiapdb
+#      MYSQL_USER: admin
+#      MYSQL_PASSWORD: 123
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - ./local/init.sql:/docker-entrypoint-initdb.d/init.sql
+#      - mysql-data:/var/lib/mysql
+#    healthcheck:
+#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
+#    networks:
+#      - app-network
+#    restart: unless-stopped
 
-  mongodb:
-    image: mongo
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME:
-      MONGO_INITDB_ROOT_PASSWORD:
-    networks:
-      - app-network
-    restart: unless-stopped
+#  mongodb:
+#    image: mongo
+#    container_name: mongodb
+#    ports:
+#      - "27017:27017"
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME:
+#      MONGO_INITDB_ROOT_PASSWORD:
+#    networks:
+#      - app-network
+#    restart: unless-stopped
 
   redis:
     image: redis:latest
@@ -42,18 +42,18 @@ services:
       - app-network
     restart: unless-stopped
 
-  rabbitmq:
-    image: rabbitmq:3.13-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    networks:
-      - app-network
-    restart: unless-stopped
+#  rabbitmq:
+#    image: rabbitmq:3.13-management
+#    container_name: rabbitmq
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    environment:
+#      RABBITMQ_DEFAULT_USER: guest
+#      RABBITMQ_DEFAULT_PASS: guest
+#    networks:
+#      - app-network
+#    restart: unless-stopped
 
   orchestrator:
     build:
@@ -63,71 +63,76 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - rabbitmq
       - redis
+#     - rabbitmq
     networks:
       - app-network
     restart: unless-stopped
 
-  auth:
-    build:
-      context: ../../Hackaton-auth
-      dockerfile: Dockerfile
-    container_name: auth
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/authdb
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_PORT: 5672
-      SPRING_RABBITMQ_USERNAME: guest
-      SPRING_RABBITMQ_PASSWORD: guest
-    depends_on:
-      - mongodb
-      - rabbitmq
-    networks:
-      - app-network
-    restart: unless-stopped
+#  auth:
+#    build:
+#      context: ../../Hackaton-auth
+#      dockerfile: Dockerfile
+#    container_name: auth
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/authdb
+#      SPRING_RABBITMQ_HOST: rabbitmq
+#      SPRING_RABBITMQ_PORT: 5672
+#      SPRING_RABBITMQ_USERNAME: guest
+#      SPRING_RABBITMQ_PASSWORD: guest
+#    depends_on:
+#      - mongodb
+#      - rabbitmq
+#    networks:
+#      - app-network
+#    restart: unless-stopped
 
-  frame_extractor_service:
-    build:
-      context: ../../Hackaton-frame-extractor-service
-      dockerfile: Dockerfile
-    container_name: frame_extractor_service
-    ports:
-      - "8082:8082"
-    depends_on:
-      - mysql
-      - rabbitmq
-      - redis
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fiapdb?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: fiapuser
-      SPRING_DATASOURCE_PASSWORD: 123
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
-    networks:
-      - app-network
-    restart: unless-stopped
+#  frame_extractor_service:
+#    build:
+#      context: ../../Hackaton-frame-extractor-service
+#      dockerfile: Dockerfile
+#    container_name: frame_extractor_service
+#    ports:
+#      - "8082:8082"
+#    depends_on:
+#      - mysql
+#      - rabbitmq
+#      - redis
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fiapdb?useSSL=false&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: admin
+#      SPRING_DATASOURCE_PASSWORD: 123
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+#      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
+#    networks:
+#      - app-network
+#    restart: unless-stopped
 
-  frontend:
-    build:
-      context: ../../Hackaton-ui/hackaton-ui
-      dockerfile: Dockerfile
-    container_name: frontend
-    ports:
-      - "4200:80"
-    depends_on:
-      - auth
-      - orchestrator
-      - frame_extractor_service
-    networks:
-      - app-network
-    restart: unless-stopped
+#  frontend:
+#    build:
+#      context: ../../Hackaton-ui/hackaton-ui
+#      dockerfile: Dockerfile
+#    container_name: frontend
+#    ports:
+#      - "4200:8080"
+#    depends_on:
+#      - auth
+#      - orchestrator
+#      - frame_extractor_service
+#    networks:
+#      - app-network
+#    restart: unless-stopped
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://localhost" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
 
-volumes:
-  mysql-data:
-
+#volumes:
+#  mysql-data:
+#
 networks:
   app-network:
     driver: bridge
